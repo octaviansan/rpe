@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RPE 1RM Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .card {
+      background: #1e1e1e;
+      padding: 25px;
+      border-radius: 12px;
+      width: 320px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #4caf50;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>1RM Calculator</h2>
+
+  <input type="number" id="weight" placeholder="Weight (kg)" />
+
+  <input type="number" id="reps" placeholder="Reps (1–12)" min="1" max="12"/>
+
+  <select id="rpe">
+    <option value="10">RPE 10</option>
+    <option value="9.5">RPE 9.5</option>
+    <option value="9">RPE 9</option>
+    <option value="8.5">RPE 8.5</option>
+    <option value="8">RPE 8</option>
+    <option value="7.5">RPE 7.5</option>
+    <option value="7">RPE 7</option>
+    <option value="6.5">RPE 6.5</option>
+  </select>
+
+  <button onclick="calculate()">Estimate 1RM</button>
+
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+const rpeChart = {
+  10:   [100.0,95.5,92.2,89.2,86.3,83.7,81.1,78.6,76.2,73.9,70.7,68.0],
+  9.5:  [97.8,93.9,90.7,87.8,85.0,82.4,79.9,77.4,75.1,72.3,69.4,66.7],
+  9:    [95.5,92.2,89.2,86.3,83.7,81.1,78.6,76.2,73.9,70.7,68.0,65.3],
+  8.5:  [93.9,90.7,87.8,85.0,82.4,79.9,77.4,75.1,72.3,69.4,66.7,64.0],
+  8:    [92.2,89.2,86.3,83.7,81.1,78.6,76.2,73.9,70.7,68.0,65.3,62.6],
+  7.5:  [90.7,87.8,85.0,82.4,79.9,77.4,75.1,72.3,69.4,66.7,64.0,61.3],
+  7:    [89.2,86.3,83.7,81.1,78.6,76.2,73.9,70.7,68.0,65.3,62.6,59.9],
+  6.5:  [87.8,85.0,82.4,79.9,77.4,75.1,72.3,69.4,66.7,64.0,61.3,58.6]
+};
+
+function calculate() {
+  const weight = parseFloat(document.getElementById("weight").value);
+  const reps = parseInt(document.getElementById("reps").value);
+  const rpe = parseFloat(document.getElementById("rpe").value);
+
+  if (!weight || !reps || reps < 1 || reps > 12) {
+    document.getElementById("result").innerText = "Enter valid inputs";
+    return;
+  }
+
+  const percent = rpeChart[rpe][reps - 1] / 100;
+  const oneRM = weight / percent;
+
+  document.getElementById("result").innerText =
+    "Estimated 1RM: " + oneRM.toFixed(1) + " kg";
+}
+</script>
+
+</body>
+</html>
